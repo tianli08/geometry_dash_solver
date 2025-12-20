@@ -1,5 +1,4 @@
-import pyautogui as pt
-import pyautogui, sys
+import pyautogui
 from pynput import mouse
 from time import perf_counter_ns
 
@@ -8,11 +7,7 @@ events_ns = [] # Stores pairs in events_ns, this ensures that each ns value is d
 
 # Temp vars as of right now, these are for counting how many times the user has clicked, with bounded amount of clickLimit times.
 release_count = 0
-clickLimit = 15
-
-def toSeconds(nanoseconds) -> float:
-    return nanoseconds / 1e9
-
+clickLimit = 5
 
 def holdMouse(replayMode):
     """
@@ -52,6 +47,9 @@ def on_click(x, y, button, pressed) -> None: # Records clicks based on the init 
         release_count += 1
         if release_count >= clickLimit:
             return False
+
+def click_on(coords: tuple) -> None:
+    pyautogui.click(coords)
 
 if __name__ == "__main__" :
     print("Debug Section")

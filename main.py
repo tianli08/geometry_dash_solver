@@ -1,21 +1,18 @@
 import systemClick
 import pyautogui as pt
-import pyautogui, sys
 from pynput import mouse
-from time import perf_counter_ns
-
+import time
 if __name__ == "__main__" :
 
-    with mouse.Listener(on_click=on_click) as listener: # Thread tracks based on first click.
-    listener.join()
+    with mouse.Listener(on_click=systemClick.on_click) as listener: # Thread tracks based on first click.
+        listener.join()
 
     intervals = []
     prev_release = None
     pending_press = None
-
-
+    
     # Converts into easy readable interval pairs
-    for t, kind in events_ns:
+    for t, kind in systemClick.events_ns:
         if kind == 'pressed':
             pending_press = t
             if prev_release is not None:
@@ -28,4 +25,4 @@ if __name__ == "__main__" :
 
     # Replay Mode
     time.sleep(10)
-    holdMouse(intervals)
+    systemClick.holdMouse(intervals)
