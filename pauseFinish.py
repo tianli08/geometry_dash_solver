@@ -10,18 +10,21 @@ class GameRecorder:
 
     def startRecording(self):
         self.screenIsRecording = True
+        
         # Just for experimentation with window testing
-        cv2.namedWindow("Live", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("Live", 480, 270)
+        cv2.namedWindow("Show", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("Show", 1080, 590)
 
         while True:
+            # cv2.resizeWindow("Show", 300, 200)
             img = pyautogui.screenshot()
             frame = np.array(img)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # Need frame resizing, changing for proper config on HiDPI, may not need a non version config.
+            frame = cv2.resize(frame, (1080, 590))
 
-            cv2.imshow('Live', frame)
-
-            if cv2.waitKey(100) == ord('q'):
+            cv2.imshow('Show', frame)
+            if cv2.waitKey(1) == ord('q'):
                 break
         cv2.destroyAllWindows()
 
