@@ -48,7 +48,7 @@ def on_click(x, y, button, pressed) -> None: # Records clicks based on the init 
         if release_count >= clickLimit:
             return False
 
-def click_on(coords: tuple) -> None:
+def click(coords: tuple) -> None:
     pyautogui.click(coords)
 
 if __name__ == "__main__" :
