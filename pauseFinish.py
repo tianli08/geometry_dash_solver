@@ -10,16 +10,23 @@ class GameRecorder:
         self.screenIsRecording = False
         self.playButtonImg = cv2.imread('./images/play_button.png', cv2.IMREAD_UNCHANGED)
         self.restartButtonImg = cv2.imread('./images/restart.png', cv2.IMREAD_UNCHANGED)
+
+        self.compDict = { # Defines for path for components
+            'play_button':cv2.imread('./images/play_button.png', cv2.IMREAD_UNCHANGED),
+            'restart_button':cv2.imread('./images/restart.png', cv2.IMREAD_UNCHANGED)
+        }
+
         self.cursorPos = None
         self.trueSizeX, self.trueSizeY = pyautogui.size()
 
-    def pauseMenu(self, frame) -> None:
+    def componentDetector(self, frame, component) -> None: # frame is current frame, clicks on the component if found. 
+        print(component)
         screenshotH = frame.shape[0]
         screenshotW = frame.shape[1]
         scaleH = self.trueSizeY / screenshotH
         scaleW = self.trueSizeX / screenshotW
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        result = cv2.matchTemplate(frame, self.restartButtonImg, cv2.TM_CCOEFF_NORMED)
+        result = cv2.matchTemplate(frame, component, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if max_val >= 0.75:
             needle_h = self.playButtonImg.shape[0]
@@ -53,7 +60,7 @@ class GameRecorder:
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
             
             # Implementing with different function style
-            self.pauseMenu(frame)
+            self.componentDetector(frame, self.playButtonImg)
 
 
             # Need frame resizing, changing for proper config on HiDPI, may not need a non version config.
@@ -77,6 +84,6 @@ class GameRecorder:
 
         
 
-# currGame = GameRecorder()
-# currGame.startRecording()
+currGame = GameRecorder()
+currGame.startRecording()
 # currGame.pauseButton()
