@@ -2,18 +2,7 @@ import pyautogui
 from pynput import mouse
 from time import perf_counter_ns
 
-# GLOBAL VARIABLES:
-events_ns = [] # Stores pairs in events_ns, this ensures that each ns value is defined as pressed or released.
-
-# Temp vars as of right now, these are for counting how many times the user has clicked, with bounded amount of clickLimit times.
-release_count = 0
-clickLimit = 5
-
-def holdMouse(replayMode):
-    """
-    Accurately replays mouse clicks from a list of timed events
-    to prevent the timing drift caused by time.sleep().
-    """
+def holdMouse(replayMode): # Mouse clicks based on interval of [(interval: float, event_type: float)]
 
     pyautogui.PAUSE = 0
     start_time = perf_counter_ns()
@@ -21,8 +10,6 @@ def holdMouse(replayMode):
 
     for interval, event_type in replayMode:
         next_event_time += interval
-        # print(perf_counter_ns() / 1e9)
-        # print(next_event_time / 1e9) 
 
         if event_type == 'pressed':
             pyautogui.mouseDown(button='left')
@@ -35,8 +22,13 @@ def holdMouse(replayMode):
     pyautogui.mouseUp(button='left')
 
 
-def on_click(x, y, button, pressed) -> None: # Records clicks based on the init click start
-    global release_count
+def recordClick(x, y, button, pressed) -> None: # Records clicks based on the init click start
+    # GLOBAL VARIABLES:
+    events_ns = [] # Stores pairs in events_ns, this ensures that each ns value is defined as pressed or released.
+
+    # Temp vars as of right now, these are for counting how many times the user has clicked, with bounded amount of clickLimit times.
+    release_count = 0
+    clickLimit = 5
     now = perf_counter_ns()
     events_ns.append((now, 'pressed' if pressed else 'release'))
 
@@ -48,7 +40,7 @@ def on_click(x, y, button, pressed) -> None: # Records clicks based on the init 
         if release_count >= clickLimit:
             return False
 
-def click(coords: tuple) -> None:
+def click(coords: tuple) -> None: # Clicks the mouse
     pyautogui.click(coords)
 
 if __name__ == "__main__" :
