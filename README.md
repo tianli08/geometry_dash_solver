@@ -1,0 +1,1 @@
+This automater is compatible with Geometry Dash on 1280 x 720 on Mac.
